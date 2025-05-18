@@ -32,6 +32,18 @@ prim (x,y) = x
 -- v: 1 1 2 3 5 8 ...
 fib n = if n == 1 || n == 2 then 1 else fib (n-1) + fib (n-2)
 
+-- 5) Calcular o fatorial e um número natural
+-- Solução com if-then
+-- fat n = if n == 0 then 1 else n * fat (n-1)
+
+-- Solução com Case
+-- fat 0 = 1
+-- fat n = n * fat (n - 1)
+
+-- Solução com Guardas
+fat n
+    | n == 0 = 1
+    | otherwise = n * fat (n - 1)
 
 -- Linguagem Haskell é fortemente tipada!
 --     - Int          | - Char
