@@ -17,6 +17,6 @@ idx = \x -> x
 -- 1) Calcular o dobro de um número
 dobro = \x -> 2 * x
 
-
 -- 2) Somar dois inteiros
+soma = \x -> \y -> x + y
 
