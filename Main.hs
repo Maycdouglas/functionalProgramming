@@ -9,14 +9,17 @@
     -- ghci Main.hs
     -- para imprimir no terminal: idx 1 
         -- imprimirá 1
-idx = \x -> x
+
+-- idx = \x -> x -- Forma Completa
+idx x = x -- Forma Simplificada
 
 {-- *** Exemplos *** --}
 --      name = expr
 
 -- 1) Calcular o dobro de um número
-dobro = \x -> 2 * x
+-- dobro = \x -> 2 * x -- Forma Completa
+dobro x = 2 * x -- Forma Simplificada
 
 -- 2) Somar dois inteiros
-soma = \x -> \y -> x + y
-
+-- soma = \x -> \y -> x + y - Forma Completa
+soma x y = x + y -- Forma Simplificada
