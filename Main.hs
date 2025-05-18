@@ -25,8 +25,12 @@ dobro x = 2 * x -- Forma Simplificada
 soma x y = x + y -- Forma Simplificada
 
 -- 3) Retornar o primeiro elemento de uma tupla
+prim (x,y) = x
 
--- 4)
+-- 4) Calcular o valor da n-ésima posição na sequência de fibonacci
+-- p: 1 2 3 4 5 6 ...
+-- v: 1 1 2 3 5 8 ...
+fib n = if n == 1 || n == 2 then 1 else fib (n-1) + fib (n-2)
 
 
 -- Linguagem Haskell é fortemente tipada!
