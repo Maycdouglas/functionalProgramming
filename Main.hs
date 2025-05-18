@@ -23,3 +23,16 @@ dobro x = 2 * x -- Forma Simplificada
 -- 2) Somar dois inteiros
 -- soma = \x -> \y -> x + y - Forma Completa
 soma x y = x + y -- Forma Simplificada
+
+-- 3) Retornar o primeiro elemento de uma tupla
+
+-- 4)
+
+
+-- Linguagem Haskell é fortemente tipada!
+--     - Int          | - Char
+--     - Float        | - Bool
+--     - Listas       | - Tuplas
+--     - Funções
+
+
