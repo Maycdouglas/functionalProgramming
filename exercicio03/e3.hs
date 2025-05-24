@@ -1,0 +1,1 @@
+-- para executar: ghci exercicio03\e3.hs

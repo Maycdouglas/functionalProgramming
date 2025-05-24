@@ -1,0 +1,1 @@
+-- para executar: ghci exercicio02\e2.hs
