@@ -155,3 +155,8 @@ findPrime n (x:xs)
     | otherwise = findPrime n xs
 
 isPrime n = findPrime n primes
+
+-- gera uma lista em que o valor do elemento atual é a multiplicacao do anterior pelo index do atual + 1
+-- faz uma associação da lista infinita [2..] com um elemento da lista f de forma recursiva.
+-- Dessa forma, o elemento da lista infinita é sempre um a mais que o elemento de f, pois a lista infinita inicia em 2 e o f em 1
+f = [1] ++ [x*y | (x,y) <- zip [2..] f]
