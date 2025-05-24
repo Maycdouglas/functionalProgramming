@@ -153,3 +153,5 @@ findPrime n (x:xs)
     | n == x = True
     | n < x = False
     | otherwise = findPrime n xs
+
+isPrime n = findPrime n primes
