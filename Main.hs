@@ -117,9 +117,39 @@ meuZip [] _ = [] -- o _ significa que o parametro não será referenciado. poder
 meuZip _ [] = []
 meuZip (x:xs) (y:ys) = (x,y):(meuZip xs ys)
 
---
+-- ***LIST COMPREHENSION***
 
---
+-- l1 gera uma lista dos produtos de 1 a 10 por 2
+l1 = [x * 2 | x <- [1..10]]
 
---
+-- l2 gera uma lista de números entre 50 e 100 tal que o resto da divisao deles por 7 seja 3
+l2 = [x | x <- [50..100], x `mod` 7 == 3]
 
+-- l3 gera uma lista de pares de números que o x varia entre 1 e 3 e o y varia entre 4 e 5
+l3 = [(x,y) | x <- [1..3], y <- [4..5]]
+
+-- fun é uma função que gera uma lista de listas, a partir de uma lista de listas, na qual os elementos são pares
+-- os colchetes mais internos representam o filtro dos elementos pares. O mais externo é representando cada lista da lista em questão
+fun xxs = [[x | x <- xs, even x] | xs <- xxs]
+
+-- OUTROS EXEMPLOS:
+-- 1- Determinar lados, que não exceda 10, dos triângulos retângulos cujo perímetro é 24
+-- a^2 = b^2 + c^2, a + b + c = 24, a <= 10, b <= 10, c <= 10
+
+ladosTrianguloRetangulo = [(a,b,c) | c <- [1..10], b <- [c..10], a <- [b..10], a + b + c == 24, a*a == b*b + c*c]
+-- coloco o c e a dentro das restrições de outras letras para não retornar duas triplas com valores iguais (em outra ordem)
+
+-- 2- Usando List Comprehension, defina a função square l h que retorna o quadrado dos números pares da lista limitada por l e h
+square l h = [x*x | x <- [l..h], even x]
+
+
+-- ***AVALIAÇÃO PREGUIÇOSA E LISTA INFINITA **
+
+primes = sieve [2..] -- se eu executo isso gera uma lista infinita de números primos
+sieve (x:xs) = x : sieve [y | y <- xs, y `mod` x /= 0]
+
+-- N é o número que quero descobrir se é primo. Primes é a a lista de números primos (infinita)
+findPrime n (x:xs)
+    | n == x = True
+    | n < x = False
+    | otherwise = findPrime n xs
