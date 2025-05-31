@@ -160,3 +160,27 @@ isPrime n = findPrime n primes
 -- faz uma associação da lista infinita [2..] com um elemento da lista f de forma recursiva.
 -- Dessa forma, o elemento da lista infinita é sempre um a mais que o elemento de f, pois a lista infinita inicia em 2 e o f em 1
 f = [1] ++ [x*y | (x,y) <- zip [2..] f]
+
+
+-- ***FUNÇÃO PARCIAL***
+-- A função é parcial é quando não está definida para todos os elementos do domínio.
+-- Exemplo é a função head (x:xs) = x
+-- Ela usa somente a cabeça da lista, ignorando o restante
+-- Não funciona especialmente com a lista vazia.
+
+-- ***FUNÇÃO TOTAL***
+-- A função é total quando está definida para todos os elementos do domínio
+-- se colocar um tratamento para a lista vazia, a função se torna total:
+head [] = error "Empty list, dummy!"
+head (x:xs) = x
+
+
+-- *** AVALIAÇÃO PARCIAL ***
+-- A função add é assim:
+add x y = x + y
+-- basicamente, ela tem uma função que recebe x e retorna outra funcao com y somado a 1
+-- Com isso, podemos usar a APLICAÇÃO PARCIAL para reutilizar código:
+inc1 = add 1
+-- acima, o inc1 pode ser chamado usando um inteiro qualquer e automaticamente será adicionado o valor 1 ao resultado dessa funcao
+
+--- *** FUNÇÃO DE ORDEM SUPERIOR ***
