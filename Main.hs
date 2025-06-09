@@ -184,3 +184,125 @@ inc1 = add 1
 -- acima, o inc1 pode ser chamado usando um inteiro qualquer e automaticamente será adicionado o valor 1 ao resultado dessa funcao
 
 --- *** FUNÇÃO DE ORDEM SUPERIOR ***
+-- são funções que recebem outras funções como parâmetro
+
+-- Exemplos:
+
+-- 1 - map (+1) [1,3,5,7]
+-- pega cada elemento de uma lista e aplica uma função nele, nesse caso acima, soma o valor 1
+-- ex terminal: meuMap (+1) [1..4] | retorna [2..5]
+meuMap f [] = []
+meuMap f (x:xs) = (f x) : (meuMap f xs)
+
+-- 2 - zipWith (\x -> \y -> (x,y)) [1, 3, 5] ['a', 'b', 'c']
+-- tem uma função e duas listas e aplica a função nas duas listas
+-- ex terminal: meuZipWith (+) [1..4] [1..4] | retorna [2,4,6,8]
+-- ex terminal 2: meuZipWith (\a b -> (a,b)) [1..3] [1..3] | retorna [(1,1), (2,2), (3,3)]
+meuZipWith _ [] _ = []
+meuZipWith _ _ [] = []
+meuZipWith f (x:xs) (y:ys) = (f x y) : (meuZipWith f xs ys)
+
+-- 3 - filter (>10) [5..15]
+-- recebe um predicado (uma funcao que retorna true ou false) e uma lista e retorna somente os elementos que satisfazem a funcao
+-- ex terminal: meuFilter (>10) [1..20] | retorna [11..20]
+meuFilter p [] = []
+meuFilter p (x:xs) = if p x then x:(meuFilter p xs) else filter p xs
+
+-- ***FUNÇÕES DE DOBRA***
+
+-- Exemplo 1) Função que soma todos os elementos de uma lista de números
+somaDobra [] = 0 -- aqui precisa ser o elemento neutro
+somaDobra (x:xs) = x + somaDobra xs
+
+{-
+    somaDobra[1,2,3]
+    somaDobra = 1 + somaDobra[2,3]
+              = 1 + (2 + somaDobra [3])
+              = 1 + (2 + (3 + somaDobra []))
+              = 1 + (2 + (3 + 0))
+-}
+
+-- Exemplo 2) Função que multiplica os elementos de uma lista
+produtoDobra [] = 1
+produtoDobra (x:xs) = x * produtoDobra xs
+
+-- Exemplo 3) Função que faz conjunção de elementos de uma lista
+conjuncaoDobra [] = True
+conjuncaoDobra (x:xs) = x && conjuncaoDobra xs
+
+-- Generalizando o padrão acima: FOLDR
+meuFoldr f e [] = e -- e simboliza o elemento neutro
+meuFoldr f e (x:xs) = f x (meuFoldr f e xs)
+
+-- Mesmos exemplos, usando o foldr:
+-- 1) Soma
+somaDobraFoldr :: [Int] -> Int -- sem isso não funciona
+somaDobraFoldr = foldr (+) 0 -- Forma simplificada
+
+-- 2) Multiplicacao
+produtoDobraFoldr :: [Int] -> Int
+produtoDobraFoldr xs = foldr (*) 1 xs -- Forma completa
+
+-- 3) Conjunção
+conjuncaoDobraFoldr :: [Bool] -> Bool
+conjuncaoDobraFoldr = foldr (&&) True
+
+-- Generalizando o padrão: FOLDL
+meuFoldl f acc [] = acc -- e simboliza o elemento neutro
+meuFoldl f acc (x:xs) = meuFoldl f (f acc x) xs
+
+-- Exercícios de exemplo:
+
+-- 1) Defina as funções map e filter usando foldr
+meuFilterFoldr p xs = foldr (\x l -> if p x then x : l else l) [] xs -- a lista vazia é o elemento neutro
+
+meuMapFoldr f = foldr (\x l -> (f x) : l) [] -- diferentemente do exemplo acima, aqui usei a Avaliação Parcial para simplificar
+
+-- 2) Usando o foldl, implemente uma função (bin2int) que dada uma lista contendo apenas 0's e 1's, 
+-- retorna o número inteiro correspondente na base 10. Ex: bin2int [1,1] = 3 bin2int [1,1,0] = 6
+bin2int xs = foldl (\n d -> 2*n + d) 0 xs -- n é o valor acumulado e d é o digito atual
+
+-- ***TIPOS DE DADOS***
+-- Novos tipos de dados são definidos usando o construtor data
+data Color = Blue | Red | Green | Pink
+
+-- Construtores podem ter parâmetros
+data Shape = Circle Float Float Float | Rectangle Float Float Float Float
+    deriving Show
+-- deriving Show permite que seja exibido na tela ao imprimir essa classe
+-- deve respeitar a identação
+
+-- Uso de casamento de padrão para definir funções sobre tipos
+--area :: Shape -> Float
+area :: Shape -> Float
+area (Circle x y r) = pi * r * r -- posso substituir o x e y por _ pois não estou usando esses parametros
+area (Rectangle x1 y1 x2 y2) = (x2 - x1) * (y2 - y1)
+
+-- com o comando :t consigo ver o tipo da função
+-- Ex: 
+    -- :t Circle 
+    -- :t area
+
+-- Construtores e aplicação parcial
+circuloMapeado = map (Circle 10 20) [4, 5, 6, 6]
+-- o resultado seria [(Circle 10 20 4), (Circle 10 20 5), (Circle 10 20 6), (Circle 10 20 6)]
+
+-- Pessoa tem: nome, sobrenome, idade, peso, telefone e time
+data Person = Person String String Int Float String String
+
+-- exemplo para retornar o primeiro nome da Pessoa
+firstName (Person name last age peso fone time) = name
+
+-- ***SINTAXE DE REGISTROS***
+-- Solução para não ficar completamente ilegível como o código anterior
+
+data Car = Car {company :: String,
+                model :: String,
+                year :: Int
+                }
+-- OBS: Como é criado uma função para cada atributo do Registro, não é possível criar outros Registros com mesmo nome de Atributo
+-- Posso definir um carro de duas maneiras:
+carro1 = Car "Fiat" "Uno" 2010
+carro 2 = Car {company = "Volkswagen", model = "Gol", year = 2011}
+
+
