@@ -456,6 +456,49 @@ instance (Eq a) => Eq (Arvore a) where
     (Noh x t1 t2) == (Noh y t3 t4) = x == y && t1 == t3 && t2 == t4
     _ == _ = False
 
+-- *** FUNCTORES ***
+-- é uma classe de tipo que define estruturas que podem ser mapeadas
+-- usa a função fmap para isso
+
+-- class Functor f where
+    -- fmap :: (a -> b) -> f a -> f b
+-- Lê-se: Se f é um Functor, então você pode aplicar uma função (a -> b) aos elementos dentro de fa ,
+-- obtendo um f b (ou seja, o mesmo contexto, mas com os elementos transformados)
+
+-- O f não é um tipo concreto, mas um construtoer de tipo!
+
+-- O função permite que aplique uma função aos valores dentro de um contexto, sem tirá-los desse contexto.
+
+-- Exemplo com LIST
+-- fmap (*2) [1,2,3]
+    -- retorna [2,4,6]
+
+-- Criação de um Functor:
+
+data TreeFunctor a = EmptyTreeFunctor | NodeTreeFunctor a (TreeFunctor a) (TreeFunctor a)
+    deriving (Show)
+
+instance Functor TreeFunctor where
+    fmap _ EmptyTreeFunctor = EmptyTreeFunctor
+    fmap f (NodeTreeFunctor x l r) = NodeTreeFunctor (f x) (fmap f l) (fmap f r)
+
+-- Dessa forma, posso executar:
+t = NodeTreeFunctor 1 (NodeTreeFunctor 2 EmptyTreeFunctor EmptyTreeFunctor) (NodeTreeFunctor 3 EmptyTreeFunctor EmptyTreeFunctor)
+--fmap (*2) t
+-- No GHCI:
+    -- fmap (*2) t 
+        -- Retorna NodeTreeFunctor 2 (NodeTreeFunctor 4 EmptyTreeFunctor EmptyTreeFunctor) (NodeTreeFunctor 6 EmptyTreeFunctor EmptyTreeFunctor)
 
 
-
+-- LEIS DOS FUNCTORES:
+-- 1) Identidade
+    -- fmap id == id
+    -- Aplica fmap com a função identidade não muda nada
+    -- essa funcao id já existe
+-- 2) Composição
+    -- fmap (f . g) == fmap f . fmap g
+    -- Mapear uma função composta é o mesmo que mapear uma e depois a outra
+    -- se escrito assim: "fmap f . fmap g"
+        -- significa aplique primeiro g e depois f
+    -- composição encadeia funções da direita para a esquerda
+        -- (f . g) x == f (g x)
