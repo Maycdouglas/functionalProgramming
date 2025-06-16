@@ -305,4 +305,47 @@ data Car = Car {company :: String,
 carro1 = Car "Fiat" "Uno" 2010
 carro 2 = Car {company = "Volkswagen", model = "Gol", year = 2011}
 
+-- *** TIPOS PARAMETRIZADOS ***
 
+-- Exemplo de definição de Pilha de valores inteiros:
+newtype Stack = Stack [Int] 
+-- usei newType aqui pois é o recomendado por ter apenas um construtor e um campo
+
+push :: Stack -> Int -> Stack
+push (Stack xs) a = Stack (a:xs)
+
+-- Agora, se quiser uma pilha de qualquer tipo, deve ser feito assim:
+newtype Stack2 a = Stack2 [a]
+
+-- Só é possível graças ao Maybe
+-- data Maybe a = Just a | Nothing
+-- é basicamente o null de outras linguagens
+
+-- posso usar SINÔNIMOS para melhorar legibilidade
+type StackInt = Stack2 Int
+
+-- *** TIPOS RECURSIVOS ***
+
+-- implementação de uma árvore binária
+data Tree a = Empty | Node a (Tree a) (Tree a)
+
+search :: Ord a => a -> Tree a -> Bool
+-- ORD a => a 
+    -- necessário para que seja possível comparar os valores nas funções abaixo
+    -- ord vem de tipos ordenáveis
+
+search _ Empty = False
+search x (Node a t1 t2)
+    | x == a = True
+    | x < a = search x t1
+    | otherwise = search x t2
+
+insert :: Ord a => a -> Tree a -> Tree a
+insert x Empty = Node x Empty Empty
+insert x (Node a t1 t2)
+    | x <= a = Node a (insert x t1) t2 
+    | otherwise = Node a t1 (insert x t2)
+
+-- foldr insert Empty [5,1,4,2,3]
+-- o código acima iria inserir numa árvore vazia (Empty) os valores do vetor de trás pra frente
+-- ficaria o 3 como pai do 2 e 3. O 2 como pai do 1 e o 4 como pai do 5
