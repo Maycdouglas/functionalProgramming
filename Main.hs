@@ -346,6 +346,116 @@ insert x (Node a t1 t2)
     | x <= a = Node a (insert x t1) t2 
     | otherwise = Node a t1 (insert x t2)
 
--- foldr insert Empty [5,1,4,2,3]
+-- foldr insert Empty [5,1,4,2,3]d
 -- o código acima iria inserir numa árvore vazia (Empty) os valores do vetor de trás pra frente
 -- ficaria o 3 como pai do 2 e 3. O 2 como pai do 1 e o 4 como pai do 5
+
+-- *** POLIMORFISMO PARAMÉTRICO ***
+-- Polimorfismo é uma propriedade que diz respeito à funções operarem sobre diferentes tipos
+-- Exemplos de funções polimórficas já utilizadas:
+    -- length :: [a] -> Int
+    -- length [] = 0
+    -- length (x:xs) = length xs + 1
+-- Ou seja, as funções operam sem tomar decisões baseada nos tipos dos argumentos
+-- Exemplo:
+identidade :: a -> a
+identidade x = x
+
+-- No GHCI, qualquer um dos abaixo funcionaria:
+-- identidade 5
+    -- retornaria 5
+-- identidade "Hello"
+    -- retornaria "Hello"
+-- identidade True
+    -- retornaria True
+
+-- *** POLIMORFISMO DE SOBRECARGA (AD-HOC) ***
+-- Neste caso, a função também funciona para vários tipos, mas exige que eles cumpram certas restrições (Typeclasses como Eq, Ord e Show)
+-- Exemplo:
+
+ehIgual :: Eq a => a -> a -> Bool
+ehIgual x y = x == y
+-- Aqui o a pode ser qualquer tipo que implemente a typeclasse Eq (Ou seja, suporte comparação de igualdade ==)
+
+-- No GHCI:
+-- ehIgual 5 5
+    -- retorna True
+-- ehIgual "a" "b"
+    -- retorna False
+-- ehIgual (Just 3) 3
+    -- retorna Erro! Tipos diferentes
+
+-- Agora exemplo com Ordenação
+maior :: Ord a => a -> a -> a
+maior x y
+    | x > y      = x
+    | otherwise = y
+
+-- Funciona para qualquer tipo que possa ser comparado (Ord)
+
+-- *** TYPECLASSES - CLASSES DE TIPO ***
+-- São uma forma de definir comportamentos que um tipo poder ter
+-- Funciona como um conjunto de operações que um tipo deve implementar para ser uma instância dessa typeclass
+-- Exemplo já utilizados: Eq, Ord e Show
+-- Exemplo:
+class Descrevivel a where
+    descrever :: a -> String
+
+-- Criando instância
+data Pessoa = Pessoa String Int
+
+instance Descrevivel Pessoa where
+    descrever (Pessoa nome idade) = nome ++ " tem " ++ show idade ++ " anos."
+
+p1 = Pessoa "Alice" 30
+
+-- NO GHCI:
+-- descrever p1
+    -- retorna Alice tem 30 anos.
+
+-- Outro exemplo:
+class Igual a where
+    (===) :: a -> a -> Bool
+    (/==) :: a -> a -> Bool
+
+data Booleano = Falso | Verdadeiro
+    deriving (Show)
+
+-- Classes de tipo podem ser subclasses de outras
+-- Exemplo de classes de tipo:
+    -- Eq
+        -- Comparação de igualdade ==  e /=
+    -- Ord - Subclasse de Eq
+        -- Ordenação> <, >, <=, >=
+    -- Read
+        -- Conversão de String para valor
+    -- Show
+        -- Conversão para String
+    -- Enum
+        -- Tipos que podem ser enumerados
+        -- toEnum
+            -- Tranforma inteiro em Enum
+        -- fromEnum
+            -- Transforma Enum em Inteiro
+
+instance Igual Booleano where
+    (===) Verdadeiro Verdadeiro = True
+    (===) Falso Falso = True
+    (===) _ _ = False
+    (/==) x y = not (x === y)
+
+-- *** INSTÂNCIAS PARAMETRIZADAS ***
+-- São instâncias de typeclasses para tipos genéricos, mas que podem depender de que os parâmetros de tipo implementem certas typeclasses
+
+-- Exemplo:
+
+data Arvore a = Vazio | Noh a (Arvore a) (Arvore a)
+
+instance (Eq a) => Eq (Arvore a) where
+    Vazio == Vazio = True
+    (Noh x t1 t2) == (Noh y t3 t4) = x == y && t1 == t3 && t2 == t4
+    _ == _ = False
+
+
+
+
