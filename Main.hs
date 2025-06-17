@@ -502,3 +502,59 @@ t = NodeTreeFunctor 1 (NodeTreeFunctor 2 EmptyTreeFunctor EmptyTreeFunctor) (Nod
         -- significa aplique primeiro g e depois f
     -- composição encadeia funções da direita para a esquerda
         -- (f . g) x == f (g x)
+
+
+-- *** APPLICATIVE ***
+-- classe de tipo que permite aplicar funções que estão dentro de contextos a valores que também estão dentro desses contextos.
+
+-- class (Functor f) => Applicative f where
+--    pure :: a -> f a
+--    (<*>) :: f (a -> b) -> f a -> f b
+
+-- pure
+    -- coloca um valor dentro do contexto
+    -- Exemplos:
+        -- pure 5 == Just 5
+        -- pure 5 == [5]
+
+-- <*> (aplicação)
+    -- aplica uma função que está dentro de um contexto (f (a -> b)) a um valor dentro de outro contexto (f a)
+
+-- No Functor você consegue fazer isso:
+    -- fmap (+1) (Just 5) 
+        -- retorna Just 6
+-- No Applicative você consegue fazer isso:
+    -- Just (+1) <*> Just 5
+        -- retorn Just 6
+
+-- Exemplos:
+    -- Com Maybe:
+        -- Just (+3) <*> Just 4
+            -- retorna Just 7
+        -- Just (*2) <*> Nothing
+            -- retorna Nothing
+    -- Com Listas:
+        -- [(+1), (*2)] <*> [10, 20]
+            -- retorna [11,21,20,40]
+            -- faz todas as combinações dessas duas listas
+
+    -- Com múltiplos argumentos:
+        -- pure (+) <*> Just 3 <*> Just 5
+            -- retorna Just 8
+        -- pure (+) <*> Just 3 <*> Nothing
+            -- retorna Nothing
+        -- a função (+) é colocada dentro do contexto com pure e aplicada sequencialmente
+
+-- Exemplo de criação:
+
+data PersonApp = PersonApp String Int
+    deriving Show
+
+mkPerson :: String -> Int -> PersonApp
+mkPerson = PersonApp
+
+-- No GHCI:
+    -- Just mkPerson <*> Just "Alice" <*> Just 30
+        -- retorna Just (Person "Alice" 30)
+    -- Just mkPerson <*> Nothing <*> Just 30
+        -- retorna Nothing
