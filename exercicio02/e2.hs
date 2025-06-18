@@ -90,4 +90,16 @@ replace x y (z:zs) = foldr (\z listaNova -> if z == x then y : listaNova else z 
 -- exemplo: replace 1 2 [1,3,1,4,2]
     -- retorna [2,3,2,4,2]
 
+-- b) computa a frequencia de cada elemento em uma lista
+count :: Eq a => [a] -> [(Int,a)]
+count (x:xs) = foldr insertCount [] (x:xs)
+    where 
+        insertCount z [] = [(1,z)]
+        insertCount z ((n,y):ys)
+            | z == y = (n+1, y) : ys
+            | otherwise = (n, y) : insertCount z ys
+
+-- exemplo: count [1,2,1,4,4,3]
+    -- retorna [(1,3),(2,4),(2,1),(1,2)]
+
 ------------------------------------------------------------------------------
