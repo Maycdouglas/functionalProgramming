@@ -117,6 +117,12 @@ meuZip [] _ = [] -- o _ significa que o parametro não será referenciado. poder
 meuZip _ [] = []
 meuZip (x:xs) (y:ys) = (x,y):(meuZip xs ys)
 
+-- sum :: (Num a) => [a] -> a
+-- soma os valores da lista
+-- ex terminal: sum [1,2,3,4,5]  ||| retorna 15
+-- como usar: soma = sum [1,2,3,4,5]
+    -- retorna o valor somado
+
 -- ***LIST COMPREHENSION***
 
 -- l1 gera uma lista dos produtos de 1 a 10 por 2
@@ -191,6 +197,8 @@ inc1 = add 1
 -- 1 - map (+1) [1,3,5,7]
 -- pega cada elemento de uma lista e aplica uma função nele, nesse caso acima, soma o valor 1
 -- ex terminal: meuMap (+1) [1..4] | retorna [2..5]
+-- como usar: novaLista = map condicao lista
+    -- retorna nova lista
 meuMap f [] = []
 meuMap f (x:xs) = (f x) : (meuMap f xs)
 
@@ -205,6 +213,8 @@ meuZipWith f (x:xs) (y:ys) = (f x y) : (meuZipWith f xs ys)
 -- 3 - filter (>10) [5..15]
 -- recebe um predicado (uma funcao que retorna true ou false) e uma lista e retorna somente os elementos que satisfazem a funcao
 -- ex terminal: meuFilter (>10) [1..20] | retorna [11..20]
+-- como usar: novaLista = filter condicao lista
+    -- retorna nova lista
 meuFilter p [] = []
 meuFilter p (x:xs) = if p x then x:(meuFilter p xs) else filter p xs
 
